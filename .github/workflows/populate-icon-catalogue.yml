@@ -22,8 +22,8 @@ jobs:
       - name: Download pinned starter collection
         run: |
           python tools/icon-catalogue/iconctl.py simple-icons \
-            amazonaws microsoftazure googlecloud kubernetes docker apachekafka \
-            postgresql redis terraform grafana databricks githubactions python java \
+            amazonwebservices googlecloud kubernetes docker apachekafka \
+            postgresql redis terraform grafana databricks githubactions python openjdk \
             --version 16.36.0
       - name: Validate catalogue
         run: python tools/icon-catalogue/iconctl.py audit
