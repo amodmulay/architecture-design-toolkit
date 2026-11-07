@@ -19,12 +19,36 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Download pinned starter collection
+      - name: Download pinned Simple Icons starter collection
         run: |
           python tools/icon-catalogue/iconctl.py simple-icons \
             googlecloud kubernetes docker apachekafka postgresql redis \
             terraform grafana databricks githubactions python openjdk \
             --version 16.36.0
+      - name: Download official AWS Architecture Icons
+        run: |
+          curl --fail --location --retry 3 \
+            "https://d1.awsstatic.com/onedam/marketing-channels/website/public/shared/architecture-icon-release/Icon-package_07312026.5846e92413caa21490223536cc97f1269e44fa92.zip" \
+            --output /tmp/aws-architecture-icons.zip
+          python tools/icon-catalogue/iconctl.py import-zip \
+            --archive /tmp/aws-architecture-icons.zip \
+            --provider aws \
+            --source-url "https://aws.amazon.com/architecture/icons/" \
+            --license "AWS Architecture Icons terms" \
+            --license-url "https://aws.amazon.com/architecture/icons/" \
+            --attribution "Amazon Web Services"
+      - name: Download official Azure Architecture Icons
+        run: |
+          curl --fail --location --retry 3 \
+            "https://arch-center.azureedge.net/icons/Azure_Public_Service_Icons_V24.zip" \
+            --output /tmp/azure-architecture-icons.zip
+          python tools/icon-catalogue/iconctl.py import-zip \
+            --archive /tmp/azure-architecture-icons.zip \
+            --provider azure \
+            --source-url "https://learn.microsoft.com/en-us/azure/architecture/icons/" \
+            --license "Microsoft Azure architecture icon terms" \
+            --license-url "https://learn.microsoft.com/en-us/azure/architecture/icons/" \
+            --attribution "Microsoft"
       - name: Validate catalogue
         run: python tools/icon-catalogue/iconctl.py audit
       - name: Commit downloaded SVGs and manifest
@@ -36,5 +60,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add icon-library
-          git commit -m "Populate starter SVG icon catalogue"
+          git commit -m "Add official AWS and Azure architecture icons"
           git push
