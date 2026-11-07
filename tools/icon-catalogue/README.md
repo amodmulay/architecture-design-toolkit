@@ -26,6 +26,8 @@ python3 tools/icon-catalogue/iconctl.py import-zip \
 # Fetch selected brand marks from a pinned Simple Icons release
 python3 tools/icon-catalogue/iconctl.py simple-icons amazonaws microsoftazure googlecloud kubernetes docker apachekafka postgresql redis terraform grafana
 
+# Full starter collection is listed in icon-library/collections/architecture-starter.json
+
 # Inspect and validate the catalogue
 python3 tools/icon-catalogue/iconctl.py list
 python3 tools/icon-catalogue/iconctl.py list azure
@@ -42,8 +44,8 @@ python3 tools/icon-catalogue/iconctl.py normalize
 - SHA-256 hashes detect modifications and identical assets.
 - Every record captures source URL, retrieval date, license, license URL, attribution, and trademark notice.
 - ZIP import ignores path traversal entries and non-SVG files.
-- The CLI does not infer a license. Unknown terms remain `UNSPECIFIED` and appear in audit warnings.
-- The Simple Icons command pins a release version. Its CC0 artwork license does not waive trademark rights; consult its disclaimer and any per-icon license metadata.
+- The CLI does not infer a license. Unknown terms remain `UNSPECIFIED`; every asset defaults to `license_status: review-required` until a human has checked the applicable terms. `audit` reports assets awaiting that review.
+- The Simple Icons command pins a release version. Its project-level CC0 license does not waive trademark rights; individual icon metadata may differ. The command marks these records `review-required` until checked.
 
 ## Catalogue record
 
