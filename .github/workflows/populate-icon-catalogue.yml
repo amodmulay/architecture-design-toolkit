@@ -25,6 +25,7 @@ jobs:
             googlecloud kubernetes docker apachekafka postgresql redis \
             terraform grafana databricks githubactions python openjdk \
             --version 16.36.0
+      # Vendor ZIPs can contain non-SVG preview entries; iconctl reports and skips invalid SVG files.
       - name: Download official AWS Architecture Icons
         run: |
           curl --fail --location --retry 3 \
