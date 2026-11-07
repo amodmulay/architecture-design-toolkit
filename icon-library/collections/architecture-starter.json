@@ -3,7 +3,6 @@
   "description": "Common cloud, container, data, messaging, observability, and developer-tool brand marks. These are brand marks, not substitutes for official product architecture icons.",
   "simple_icons_version": "16.36.0",
   "icons": [
-    "amazonwebservices",
     "apachekafka",
     "databricks",
     "docker",
