@@ -14,14 +14,16 @@ python3 tools/icon-catalogue/iconctl.py fetch \
   --url "https://example.com/service.svg" \
   --name "Example Service" --provider example \
   --license "See provider terms" \
-  --license-url "https://example.com/terms"
+  --license-url "https://example.com/terms" \\
+  --license-status review-required
 
 # Import all SVGs from a vendor-provided ZIP
 python3 tools/icon-catalogue/iconctl.py import-zip \
   --archive /tmp/vendor-icons.zip --provider azure \
   --source-url "https://learn.microsoft.com/azure/architecture/icons/" \
   --license "Microsoft architecture icon terms" \
-  --license-url "https://learn.microsoft.com/azure/architecture/icons/"
+  --license-url "https://learn.microsoft.com/azure/architecture/icons/" \\
+  --license-status review-required
 
 # Fetch selected brand marks from a pinned Simple Icons release
 python3 tools/icon-catalogue/iconctl.py simple-icons amazonaws microsoftazure googlecloud kubernetes docker apachekafka postgresql redis terraform grafana
