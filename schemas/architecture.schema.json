@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/amodmulay/architecture-design-toolkit/schemas/architecture.schema.json",
+  "title": "Architecture Model",
+  "type": "object",
+  "required": ["name", "components", "connections"],
+  "properties": {
+    "name": { "type": "string", "minLength": 1 },
+    "description": { "type": "string" },
+    "assumptions": { "type": "array", "items": { "type": "string" } },
+    "components": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "responsibility"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_-]*$" },
+          "title": { "type": "string" },
+          "responsibility": { "type": "string" },
+          "category": { "type": "string" },
+          "provider": { "type": "string" },
+          "icon_id": { "type": "string" },
+          "boundary": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "connections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "source", "target", "label"],
+        "properties": {
+          "id": { "type": "string" },
+          "source": { "type": "string" },
+          "target": { "type": "string" },
+          "label": { "type": "string" },
+          "protocol": { "type": "string" },
+          "mode": { "enum": ["sync", "async", "batch", "stream", "unknown"] },
+          "style": { "type": "string" },
+          "data_classification": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
