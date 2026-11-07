@@ -157,6 +157,7 @@ def command_zip(args: argparse.Namespace) -> None:
     if not archive.is_file():
         raise FileNotFoundError(archive)
     results = []
+    skipped = []
     with zipfile.ZipFile(archive) as zf:
         for info in zf.infolist():
             if info.is_dir() or not info.filename.lower().endswith(".svg"):
@@ -164,16 +165,24 @@ def command_zip(args: argparse.Namespace) -> None:
             # Ignore absolute paths and traversal entries in untrusted archives.
             member = Path(info.filename)
             if member.is_absolute() or ".." in member.parts:
+                skipped.append({"file": info.filename, "reason": "unsafe archive path"})
                 continue
             raw = zf.read(info)
             name = member.stem.replace("_", " ").replace("-", " ").strip()
-            results.append(store_asset(
-                asset_id=member.stem, name=name, provider=args.provider, raw=raw,
-                source_url=args.source_url, license_name=args.license,
-                license_url=args.license_url, attribution=args.attribution,
-                notes=f"Imported from {archive.name}", license_status=args.license_status,
-            ))
-    print(json.dumps({"processed": len(results), "results": results}, indent=2))
+            try:
+                results.append(store_asset(
+                    asset_id=member.stem, name=name, provider=args.provider, raw=raw,
+                    source_url=args.source_url, license_name=args.license,
+                    license_url=args.license_url, attribution=args.attribution,
+                    notes=f"Imported from {archive.name}", license_status=args.license_status,
+                ))
+            except ValueError as exc:
+                # Some vendor packs include SVG-named previews or unsupported XML.
+                # Keep the rest of the official pack usable and report every omission.
+                skipped.append({"file": info.filename, "reason": str(exc)})
+    print(json.dumps({"processed": len(results), "skipped": skipped, "results": results}, indent=2))
+    if not results:
+        raise SystemExit(1)
 
 
 def command_simple_icons(args: argparse.Namespace) -> None:
