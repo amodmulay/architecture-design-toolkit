@@ -1,0 +1,40 @@
+name: Populate icon catalogue
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/populate-icon-catalogue.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  populate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Download pinned starter collection
+        run: |
+          python tools/icon-catalogue/iconctl.py simple-icons \
+            amazonaws microsoftazure googlecloud kubernetes docker apachekafka \
+            postgresql redis terraform grafana databricks githubactions python java \
+            --version 16.36.0
+      - name: Validate catalogue
+        run: python tools/icon-catalogue/iconctl.py audit
+      - name: Commit downloaded SVGs and manifest
+        run: |
+          if git diff --quiet -- icon-library; then
+            echo "Catalogue already up to date."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add icon-library
+          git commit -m "Populate starter SVG icon catalogue"
+          git push
