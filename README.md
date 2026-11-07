@@ -8,6 +8,7 @@ Works as a shared foundation for Claude Code, Codex, and other coding agents. Th
 
 - `skills/` — reusable architecture workflows
 - `icon-library/` — local SVG catalogue and asset provenance
+- `tools/icon-catalogue/` — Python CLI for download, normalization, deduplication, and audits
 - `tools/` — reusable scripts for validation and asset management
 - `schemas/` — technology-neutral architecture data contracts
 - `templates/` — editable draw.io and Mermaid starters
@@ -21,6 +22,10 @@ Works as a shared foundation for Claude Code, Codex, and other coding agents. Th
 | [Architecture review](skills/architecture-review/SKILL.md) | Review quality, risks, gaps, and trade-offs |
 | [Technology selection](skills/technology-selection/SKILL.md) | Compare technologies against requirements |
 | [Architecture documentation](skills/architecture-documentation/SKILL.md) | Produce HLDs, C4 views, interface docs, and ADRs |
+
+## Icon catalogue
+
+Run `python3 tools/icon-catalogue/iconctl.py --help` for the icon management CLI. A starter list of common technology brand marks is in `icon-library/collections/architecture-starter.json`. Official product icons should be imported from vendor packs after reviewing their terms.
 
 ## Design principles
 
