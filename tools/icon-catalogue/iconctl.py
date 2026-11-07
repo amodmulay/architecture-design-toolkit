@@ -92,7 +92,7 @@ def read_url(url: str) -> bytes:
 
 def store_asset(*, asset_id: str, name: str, provider: str, raw: bytes,
                 source_url: str, license_name: str, license_url: str = "",
-                attribution: str = "", notes: str = "") -> dict:
+                attribution: str = "", notes: str = "", license_status: str = "review-required") -> dict:
     asset_id = slug(asset_id)
     provider_slug = slug(provider)
     normalized = normalize_svg(raw)
@@ -126,6 +126,7 @@ def store_asset(*, asset_id: str, name: str, provider: str, raw: bytes,
         "source_url": source_url,
         "license": license_name or "UNSPECIFIED",
         "license_url": license_url,
+        "license_status": license_status,
         "attribution": attribution,
         "retrieved_on": date.today().isoformat(),
         "sha256": digest,
@@ -146,6 +147,7 @@ def command_fetch(args: argparse.Namespace) -> None:
         asset_id=args.id or args.name, name=args.name, provider=args.provider, raw=raw,
         source_url=args.source_url or args.url, license_name=args.license,
         license_url=args.license_url, attribution=args.attribution, notes=args.notes,
+        license_status=args.license_status,
     )
     print(json.dumps(result, indent=2))
 
@@ -169,7 +171,7 @@ def command_zip(args: argparse.Namespace) -> None:
                 asset_id=member.stem, name=name, provider=args.provider, raw=raw,
                 source_url=args.source_url, license_name=args.license,
                 license_url=args.license_url, attribution=args.attribution,
-                notes=f"Imported from {archive.name}",
+                notes=f"Imported from {archive.name}", license_status=args.license_status,
             ))
     print(json.dumps({"processed": len(results), "results": results}, indent=2))
 
@@ -185,11 +187,12 @@ def command_simple_icons(args: argparse.Namespace) -> None:
             results.append(store_asset(
                 asset_id=icon_slug, name=icon_slug.replace("-", " ").title(),
                 provider="simple-icons", raw=raw, source_url=url,
-                license_name="CC0-1.0",
-                license_url="https://github.com/simple-icons/simple-icons/blob/develop/LICENSE.md",
+                license_name="CC0-1.0 (project-level; per-icon review required)",
+                license_url="https://github.com/simple-icons/simple-icons/blob/develop/DISCLAIMER.md",
                 attribution="Simple Icons contributors",
-                notes=("Simple Icons artwork is CC0; trademark rights are not waived. "
-                       "Check the project's disclaimer and any per-icon license metadata."),
+                notes=("Simple Icons project is CC0, but per-icon license metadata may differ; "
+                       "review the icon entry and trademark guidance before redistribution."),
+                license_status="review-required",
             ))
         except Exception as exc:
             results.append({"id": icon_slug, "status": "error", "error": str(exc)})
@@ -229,8 +232,8 @@ def command_audit(_: argparse.Namespace) -> None:
         for field in ("id", "name", "provider", "path", "source_url", "license", "sha256"):
             if not asset.get(field):
                 errors.append(f"{key}: missing {field}")
-        if asset.get("license") in ("UNSPECIFIED", "UNKNOWN", ""):
-            warnings.append(f"{key}: license needs review")
+        if asset.get("license") in ("UNSPECIFIED", "UNKNOWN", "") or asset.get("license_status", "review-required") != "reviewed":
+            warnings.append(f"{key}: license/terms review required")
         path = ROOT / asset.get("path", "")
         if not path.is_file():
             errors.append(f"{key}: missing file {asset.get('path')}")
@@ -266,6 +269,7 @@ def build_parser() -> argparse.ArgumentParser:
     fetch.add_argument("--provider", required=True)
     fetch.add_argument("--license", default="UNSPECIFIED")
     fetch.add_argument("--license-url", default="")
+    fetch.add_argument("--license-status", choices=("review-required", "reviewed"), default="review-required")
     fetch.add_argument("--source-url", default="")
     fetch.add_argument("--attribution", default="")
     fetch.add_argument("--notes", default="")
@@ -277,6 +281,7 @@ def build_parser() -> argparse.ArgumentParser:
     z.add_argument("--source-url", required=True, help="Official page or download URL")
     z.add_argument("--license", default="UNSPECIFIED")
     z.add_argument("--license-url", default="")
+    z.add_argument("--license-status", choices=("review-required", "reviewed"), default="review-required")
     z.add_argument("--attribution", default="")
     z.set_defaults(func=command_zip)
 
