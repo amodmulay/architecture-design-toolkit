@@ -24,7 +24,7 @@ Works as a shared foundation for Claude Code, Codex, and other coding agents. Th
 | [Technology selection](skills/technology-selection/SKILL.md) | Compare technologies against requirements |
 | [Architecture documentation](skills/architecture-documentation/SKILL.md) | Produce HLDs, C4 views, interface docs, and ADRs |
 
-## Getting started
+## User manual\n\nSee the [User Manual](docs/USER_GUIDE.md) for setup, model authoring, icon selection, diagram generation, Draw.io editing, validation, and troubleshooting.\n\n## Getting started
 
 Read the relevant skill's `SKILL.md`. Model the architecture using [the JSON Schema](schemas/architecture.schema.json), then generate a Draw.io diagram:
 
