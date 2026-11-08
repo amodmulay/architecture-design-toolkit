@@ -1,6 +1,6 @@
 ---
 name: architecture-review
-description: Review an existing or proposed software, cloud, data, integration, or AI architecture for quality, risks, gaps, and trade-offs.
+description: Review an existing or proposed software, cloud, data, integration, embedded, or AI architecture for quality, risks, gaps, and trade-offs. Use when asked to assess, critique, or validate an architecture.
 ---
 
 # Architecture Review
