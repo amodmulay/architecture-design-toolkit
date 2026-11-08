@@ -12,6 +12,7 @@ The toolkit uses the open Agent Skills format. Its architecture workflows can be
 - `icon-library/` — local SVG catalogue and asset provenance
 - `tools/icon-catalogue/` — Python CLI for download, normalization, deduplication, and audits
 - `tools/diagram-generator/` — canonical architecture JSON validation and editable Draw.io generation
+- `docs/DESIGN_REFERENCE_STACK_DIAGRAM.md` — design direction inspired by the stack-diagram reference
 - `schemas/` — technology-neutral architecture data contracts
 - `templates/` — editable Draw.io and Mermaid starters
 - `examples/` — sample architecture models and outputs
@@ -51,7 +52,7 @@ Run the generator's tests:
 python3 -m unittest discover -s tools/diagram-generator -p 'test_*.py' -v
 ```
 
-See the [User Manual](docs/USER_GUIDE.md) for setup, model authoring, icon selection, diagram generation, Draw.io editing, validation, and troubleshooting.
+See the [User Manual](docs/USER_GUIDE.md) for setup, model authoring, icon selection, diagram generation, Draw.io editing, validation, and troubleshooting. See the [visual design reference](docs/DESIGN_REFERENCE_STACK_DIAGRAM.md) for the planned renderer and diagram experience.
 
 ## Icon catalogue
 
