@@ -1,16 +1,33 @@
 # Install the Architecture Design Toolkit skills
 
-The toolkit uses the open Agent Skills format: each skill is a folder containing a `SKILL.md` with YAML `name` and `description` metadata. The instructions are host-neutral; supported tools discover them from their own skill directories.
+The toolkit uses the open Agent Skills format: each skill is a folder containing a `SKILL.md` with YAML `name` and `description` metadata. The same instructions can be discovered by multiple coding assistants.
 
 ## One-command installation
 
-Clone the repository, then run from the toolkit root:
+Clone the toolkit:
 
 ```bash
+git clone https://github.com/amodmulay/architecture-design-toolkit.git
+```
+
+Run the installer from the **root of the project where you want the skills installed**.
+
+If you are installing into the toolkit checkout itself:
+
+```bash
+cd architecture-design-toolkit
 python3 tools/install-skills/install_skills.py --host all --scope project
 ```
 
-Run this command from the root of the project where you want the skills installed. If the toolkit checkout is elsewhere, call the installer by its full path and pass `--repo-root`:
+If you want to install into a different project, run the toolkit installer from that project's root and point it to the toolkit checkout:
+
+```bash
+cd /path/to/your-project
+python3 /path/to/architecture-design-toolkit/tools/install-skills/install_skills.py \
+  --repo-root /path/to/architecture-design-toolkit --host all --scope project
+```
+
+The installer copies all four skills into the host-specific project directories:
 
 | Host | Project skill directory |
 |---|---|
@@ -20,10 +37,11 @@ Run this command from the root of the project where you want the skills installe
 
 To install for one host only, replace `all` with `claude`, `copilot`, or `codex`.
 
-To install into your user-level skill directory for use across projects:
+For user-level installation across projects, run:
 
 ```bash
-python3 tools/install-skills/install_skills.py --host all --scope user
+python3 /path/to/architecture-design-toolkit/tools/install-skills/install_skills.py \
+  --repo-root /path/to/architecture-design-toolkit --host all --scope user
 ```
 
 User-level destinations are `~/.claude/skills/`, `~/.copilot/skills/`, and `~/.agents/skills/` respectively.
@@ -32,7 +50,7 @@ Use `--force` to replace an existing installed copy. By default, existing skill 
 
 ## Install a single skill with GitHub CLI
 
-GitHub CLI's skill command can install a skill directly from this repository (GitHub CLI 2.90.0+; preview feature):
+GitHub CLI's `gh skill` command can install a skill directly from this repository (GitHub CLI 2.90.0+; preview feature):
 
 ```bash
 gh skill preview amodmulay/architecture-design-toolkit architecture-diagram
@@ -43,9 +61,9 @@ Use `gh skill install --help` to see the current host names and options for your
 
 ## Invoke a skill
 
-Skill discovery and invocation syntax are controlled by the host, not by the toolkit:
+The skill name is the command name. Invocation syntax is host-dependent:
 
-| Host | How to invoke |
+| Host | Example invocation |
 |---|---|
 | Claude Code | `/architecture-diagram`, `/architecture-review`, `/technology-selection`, `/architecture-documentation` |
 | GitHub Copilot | The same `/architecture-diagram` style slash commands in supported Copilot agent sessions; skills can also load automatically when relevant. |
@@ -58,7 +76,7 @@ Examples:
 - `/technology-selection Compare Kafka, Azure Event Hubs, and AWS Kinesis for vehicle telemetry ingestion.`
 - `/architecture-documentation Create an HLD and ADRs for this solution.`
 
-For Codex, use the corresponding `$skill-name` mention. Copilot's slash-command availability depends on the Copilot client/harness version; if the command is not listed, describe the task and Copilot can still select the skill by its description.
+For Codex, use the corresponding `$skill-name` mention. Copilot's slash-command availability depends on the client and harness version; if a command is not listed, describe the task and Copilot can still select the skill by its description.
 
 ## Use inside the toolkit repository
 
@@ -66,4 +84,4 @@ The repository also includes host-discoverable copies under `.claude/skills/`, `
 
 ## Important distinction
 
-The Agent Skills format makes the **instructions portable**; it does not make every host's command interface identical. A skill named `architecture-diagram` can be explicitly invoked as `/architecture-diagram` in Claude Code, while Codex and Copilot may expose it through their own selector, mention, or automatic skill matching. Avoid assuming that a literal `/skill-name` command works in every coding assistant.
+The Agent Skills format makes the **instructions portable**; it does not make every host's command interface identical. A skill named `architecture-diagram` can be explicitly invoked as `/architecture-diagram` in Claude Code and supported Copilot clients, while Codex commonly uses `$architecture-diagram` or its skill selector.
