@@ -5,13 +5,15 @@ on:
     paths:
       - "tools/diagram-generator/**"
       - "schemas/architecture.schema.json"
-      - "examples/**"\n      - "docs/**"
+      - "examples/**"
+      - "docs/**"
       - ".github/workflows/diagram-generator-tests.yml"
   pull_request:
     paths:
       - "tools/diagram-generator/**"
       - "schemas/architecture.schema.json"
       - "examples/**"
+      - "docs/**"
 
 permissions:
   contents: read
@@ -27,6 +29,6 @@ jobs:
       - name: Validate sample model
         run: python tools/diagram-generator/diagramgen.py examples/connected-vehicle-data-platform.json --validate-only
       - name: Generate editable Draw.io file
-        run: python tools/diagram-generator/diagramgen.py examples/connected-vehicle-data-platform.json --out /tmp/connected-vehicle-data-platform.drawio
+        run: python tools/diagram-generator/diagramgen.py examples/connected-vehicle-data-platform.json --out /tmp/connected-vehicle-data-platform.drawio --layout-report
       - name: Run unit tests
         run: python -m unittest discover -s tools/diagram-generator -p 'test_*.py' -v
