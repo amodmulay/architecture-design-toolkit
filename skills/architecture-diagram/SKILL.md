@@ -1,6 +1,6 @@
 ---
 name: architecture-diagram
-description: Create technically accurate, editable architecture diagrams from a system concept and chosen technologies, platforms, and cloud providers. Supports draw.io XML and Mermaid.
+description: Create or update editable software, cloud, data, AI, embedded, and connected-vehicle architecture diagrams from a system concept. Use when asked to draw, visualize, map, or generate an architecture diagram; outputs Draw.io or Mermaid.
 ---
 
 # Architecture Diagram
@@ -13,9 +13,9 @@ Create technically accurate, editable architecture diagrams from the user's conc
 2. Capture goal, actors, scope, requirements, technology choices, cloud/platform providers, integrations, protocols, data flows, trust boundaries, and desired output.
 3. Ask only for missing decisions that materially affect the architecture. Mark assumptions explicitly.
 4. Build a component inventory, boundary inventory, and connection list.
-5. Create or update a canonical JSON model conforming to `schemas/architecture.schema.json`.
+5. Create or update a canonical JSON model conforming to `schemas/architecture.schema.json`. If the toolkit is not present in the working repository, use the installed skill's bundled instructions and ask before adding toolkit files or downloading dependencies.
 6. Validate IDs, required fields, boundary references, and connection endpoints before drawing.
-7. Use `tools/diagram-generator/diagramgen.py` to generate editable Draw.io XML. Use Mermaid when text-first version control is preferred.
+7. If the toolkit repository is available, use `tools/diagram-generator/diagramgen.py` to generate editable Draw.io XML. Otherwise create valid Draw.io XML directly or use Mermaid if the user prefers text-first diagrams; do not assume relative toolkit paths exist.
 8. Render, inspect, correct, and re-render the diagram. Do not claim visual verification unless performed.
 
 ## Canonical model
@@ -52,9 +52,9 @@ Edges must attach to node boundaries:
 
 The current generator provides deterministic lane placement and orthogonal waypoints. Complex graphs may need manual layout refinement; do not claim collision-free routing until that capability is implemented and verified.
 
-## Generate
+## Generate with the toolkit
 
-From the repository root:
+From the toolkit repository root:
 
 ```bash
 python3 tools/diagram-generator/diagramgen.py architecture/model.json --out architecture/system.drawio
