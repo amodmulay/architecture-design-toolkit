@@ -1,11 +1,45 @@
 ---
 name: architecture-diagram
-description: Create or update editable software, cloud, data, AI, embedded, and connected-vehicle architecture diagrams from a system concept. Use when asked to draw, visualize, map, or generate an architecture diagram; outputs Draw.io or Mermaid.
+description: Create architecture, system, cloud, infrastructure, technology-stack, AI and connected-vehicle diagrams from natural-language descriptions, existing specs or code. Use for diagramming requests even when no output format is specified. Produces editable Draw.io and, when suitable, self-contained HTML or PNG previews.
 ---
 
 # Architecture Diagram
 
-Create technically accurate, editable architecture diagrams from the user's concept and technology choices. Treat the canonical architecture JSON as the source of truth; diagrams are generated views, not the primary model.
+Create technically accurate, clear and visually polished architecture diagrams. The user's experience should be simple: describe the system in natural language, and the skill handles architecture extraction, icon selection, layout, generation and verification.
+
+Treat the canonical architecture JSON as the source of truth; diagrams are generated views, not the primary model.
+
+## Experience contract
+
+- Accept a one-sentence stack description, longer narrative, requirements/specification, existing diagram, repository code or infrastructure files.
+- Do not require users to hand-author JSON. Build or update the canonical model as an implementation detail.
+- If the request is clear, proceed without a questionnaire. Ask only when a missing fact could materially change architecture semantics or create a misleading diagram.
+- Infer reasonable groupings and primary/secondary flows from context. Mark inferred details as assumptions in the model rather than presenting them as confirmed facts.
+- Default deliverables: editable Draw.io plus PNG preview. Also provide self-contained HTML when the available renderer supports it.
+- Save outputs under a predictable directory such as `architecture/<system-name>/`, including the model, diagram, preview and asset attribution.
+
+Example:
+```text
+/architecture-diagram Create the architecture for an AI-enabled vehicle telemetry platform. Vehicle gateways send signals over MQTT to Azure ingestion, stream through Event Hubs, process with Databricks, and expose fleet insights through an AI assistant using retrieval-augmented generation.
+```
+
+## Diagram content semantics
+
+Build three inventories before layout:
+
+- **Nodes:** systems, services, applications, devices, data stores, AI models/agents, gateways and operational tools. Give each a clear name and short responsibility.
+- **Groups:** runtime, deployment, ownership, cloud/provider, vehicle/offboard, network, repository or trust boundaries. Nest at most one level unless the system genuinely requires more.
+- **Edges:** primary runtime/data flow, secondary integration, and development/deployment/control-plane relationships. Label edges with protocol, data or action where known.
+
+Use a coherent visual hierarchy:
+- Make the primary user or data journey visually prominent.
+- Use neutral styling for secondary integrations.
+- Use dashed lines for CI/CD, provisioning, scheduled jobs or other non-runtime relationships.
+- Keep labels concise and avoid lines crossing text or node tiles.
+- Show vehicle vs cloud, OEM vs supplier, safety-related vs non-safety-related, trusted vs external, and production vs engineering boundaries when relevant and supported by evidence.
+
+For SDV and AI-defined Vehicle diagrams, distinguish onboard/edge, connectivity, OEM cloud, enterprise, supplier and external AI services. Identify safety-relevant paths, data residency boundaries, OTA and fleet-management flows where supported. Never infer safety certification or functional-safety classification from product names alone.
+
 
 ## Workflow
 
@@ -29,14 +63,20 @@ The model contains:
 
 Keep IDs stable across revisions. Preserve user-selected technologies. Do not invent components or connections to fill visual space. Distinguish confirmed facts from assumptions.
 
-## Icon sourcing
+## Icon sourcing and visual rules
 
-Use this order:
-1. Official vendor architecture icon packs (AWS, Microsoft Azure, Google Cloud, Kubernetes, etc.).
-2. Reputable brand icon catalogues such as Simple Icons or Iconify.
-3. Consistent neutral pictograms when no suitable icon is available.
+Use official vendor architecture icons for cloud services wherever the vendor publishes them. For general technologies, use official brand marks or a reputable source with clear provenance. Use neutral pictograms for abstract concepts (queue, user, device, scheduler, trust boundary) rather than inventing a logo.
 
-Fetch only icons actually used. Prefer SVG, preserve aspect ratio, and record source URL, retrieval date, license/terms, and attribution in `icon-library/manifest.json` or diagram-local `ASSETS.md`. Do not hotlink assets in final diagrams. Do not fabricate logos or imply a technology that is not in the design.
+Rules:
+- Never recolor, redraw, crop, rotate or distort a brand logo.
+- Preserve aspect ratio. Use a dark tile or neutral backing when a light logo would disappear; do not alter the logo itself.
+- Do not represent a specific vendor product with a generic or incorrect icon. Where no exact product icon exists, use the vendor's prescribed category icon or a neutral pictogram and retain the accurate product label.
+- Use full vendor product names when abbreviations could create ambiguity.
+- For AWS, Azure and Google Cloud, follow providers' diagram conventions for resource groups, regions, VPCs/VNets, subnets and availability zones.
+- Source only icons used. Record source URL, retrieval date, license/terms and attribution in `icon-library/manifest.json` or diagram-local `ASSETS.md`. Keep vendor packs and downloaded logos out of redistributed artefacts when vendor terms do not permit bundling them.
+- Never hotlink icons in the final diagram. Embed permitted assets; otherwise explain external asset requirements.
+- Do not invent logos or imply a technology is present when it is not.
+
 
 ## Draw.io layout and routing
 
@@ -68,20 +108,42 @@ python3 tools/diagram-generator/diagramgen.py architecture/model.json --validate
 
 The generator embeds uniquely resolved local SVG icons. Use icon IDs as paths relative to `icon-library/` or as unique SVG filenames/stems. Unresolved or ambiguous icons are omitted rather than guessed.
 
+## Visual renderer and outputs
+
+The canonical model is renderer-independent. Prefer editable Draw.io for engineering handover and self-contained HTML/SVG for polished sharing when a compatible renderer is available. PNG is a derived preview, not the source of truth.
+
+For HTML/SVG rendering, use a reusable template with design tokens for typography, colors, node tiles, group panels, arrowheads, edge labels, light/dark themes and spacing. Keep node, group and edge data separate from the template. Inline permitted icons, fonts and CSS where practical so HTML can open offline.
+
+If the toolkit has no suitable HTML renderer yet, do not fake one or claim it exists: use the current Draw.io generator, deliver its editable file, and note that HTML rendering is a planned renderer.
+
 ## Mermaid output
 
 Create valid Mermaid flowchart source with stable IDs, clear labels, and subgraphs for meaningful boundaries. Mermaid layout is renderer-controlled; do not promise pixel-perfect placement or edge anchoring. Use Mermaid when maintainability and text diffs matter more than exact geometry.
 
 ## Validation and visual inspection — mandatory
 
-- Validate model structure and references.
-- Validate emitted XML syntax.
-- Render a PNG/SVG preview using an available compatible renderer.
-- Open and visually inspect the rendered image.
-- Check clipping, readability, alignment, edge anchoring, routing, crossings, labels, direction, and canvas margins.
-- Fix defects, render again, and inspect again.
-- If rendering or visual inspection is unavailable, state exactly what could not be verified.
+- Validate model structure, references and semantic assumptions.
+- Validate emitted Draw.io XML or HTML/SVG syntax.
+- Render using the target renderer. For browser-based HTML/SVG, use headless Chromium when available; for Draw.io, use a compatible diagrams.net renderer.
+- Inspect the actual rendered image, not just source code.
+- Check clipping, readability, alignment, edge anchoring, connector crossings, labels, arrow direction, group containment, icon visibility and canvas margins.
+- Check both light and dark themes when both are produced.
+- Fix defects, re-render and inspect again.
+- If no compatible renderer is available, state exactly what was validated and what visual properties could not be checked. Never claim visual QA from XML parsing alone.
 
 ## Deliverables
 
-Save source, preview, and asset attribution in a clearly named directory such as `architecture/`. Include a short README describing format, assumptions, and editing instructions.
+Default:
+- Canonical architecture model JSON.
+- Editable Draw.io file.
+- PNG preview after successful visual inspection.
+- Asset attribution/provenance file.
+- Brief README with assumptions and editing instructions.
+
+Optional on request or where supported:
+- Self-contained HTML/SVG diagram, including light/dark variants.
+- React/TSX component.
+- Mermaid source.
+- C4 context/container/component views or separate deployment/data-flow/security views.
+
+Build once from the canonical model and derive alternate formats from that model. Do not create unrelated copies with divergent content.
