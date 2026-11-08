@@ -1,6 +1,6 @@
 ---
 name: architecture-documentation
-description: Create and maintain architecture documentation, including solution outlines, HLDs, C4 views, interface descriptions, and architecture decision records.
+description: Create and maintain software and solution architecture documentation, including solution outlines, HLDs, C4 views, interface descriptions, and ADRs. Use when asked to document or explain an architecture.
 ---
 
 # Architecture Documentation
@@ -29,4 +29,4 @@ Choose only sections relevant to the deliverable:
 
 ## Quality rules
 
-Link design choices to requirements. Separate facts, decisions, assumptions, and open questions. Use diagrams where they clarify boundaries or flows. Keep terminology consistent across diagrams and prose. Do not fabricate measurements, commitments, or compliance claims.
+Link design choices to requirements. Separate facts, decisions, assumptions, and open questions. Use diagrams where they clarify boundaries and flows. Keep terminology consistent across diagrams and prose. Do not fabricate measurements, commitments, or compliance claims.
