@@ -5,7 +5,7 @@ on:
     paths:
       - "tools/diagram-generator/**"
       - "schemas/architecture.schema.json"
-      - "examples/**"
+      - "examples/**"\n      - "docs/**"
       - ".github/workflows/diagram-generator-tests.yml"
   pull_request:
     paths:
