@@ -10,7 +10,7 @@ Clone the repository, then run from the toolkit root:
 python3 tools/install-skills/install_skills.py --host all --scope project
 ```
 
-This installs all four skills into the current working project's supported locations:
+Run this command from the root of the project where you want the skills installed. If the toolkit checkout is elsewhere, call the installer by its full path and pass `--repo-root`:
 
 | Host | Project skill directory |
 |---|---|
@@ -48,8 +48,8 @@ Skill discovery and invocation syntax are controlled by the host, not by the too
 | Host | How to invoke |
 |---|---|
 | Claude Code | `/architecture-diagram`, `/architecture-review`, `/technology-selection`, `/architecture-documentation` |
-| Codex | Use `$architecture-diagram` (or select it from `/skills` in supported clients); other skills follow the same name |
-| GitHub Copilot | Ask for the task in Agent mode; Copilot loads a matching skill based on its description. Explicit slash invocation is host/version dependent and is not guaranteed by the Agent Skills format. |
+| GitHub Copilot | The same `/architecture-diagram` style slash commands in supported Copilot agent sessions; skills can also load automatically when relevant. |
+| OpenAI Codex | Use `$architecture-diagram` (or select it from `/skills` in supported clients); other skills follow the same name. |
 
 Examples:
 
@@ -58,7 +58,7 @@ Examples:
 - `/technology-selection Compare Kafka, Azure Event Hubs, and AWS Kinesis for vehicle telemetry ingestion.`
 - `/architecture-documentation Create an HLD and ADRs for this solution.`
 
-For Codex, use the corresponding `$skill-name` mention. In Copilot, describe the task clearly and the skill should be selected when relevant.
+For Codex, use the corresponding `$skill-name` mention. Copilot's slash-command availability depends on the Copilot client/harness version; if the command is not listed, describe the task and Copilot can still select the skill by its description.
 
 ## Use inside the toolkit repository
 
