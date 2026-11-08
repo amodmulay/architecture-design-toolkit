@@ -9,6 +9,7 @@ Works as a shared foundation for Claude Code, Codex, and other coding agents. Th
 - `skills/` — reusable architecture workflows
 - `icon-library/` — local SVG catalogue and asset provenance
 - `tools/icon-catalogue/` — Python CLI for download, normalization, deduplication, and audits
+- `tools/diagram-generator/` — canonical architecture JSON validation and editable Draw.io generation
 - `tools/` — reusable scripts for validation and asset management
 - `schemas/` — technology-neutral architecture data contracts
 - `templates/` — editable draw.io and Mermaid starters
@@ -23,9 +24,23 @@ Works as a shared foundation for Claude Code, Codex, and other coding agents. Th
 | [Technology selection](skills/technology-selection/SKILL.md) | Compare technologies against requirements |
 | [Architecture documentation](skills/architecture-documentation/SKILL.md) | Produce HLDs, C4 views, interface docs, and ADRs |
 
+## Getting started
+
+Read the relevant skill's `SKILL.md`. Model the architecture using [the JSON Schema](schemas/architecture.schema.json), then generate a Draw.io diagram:
+
+```bash
+python3 tools/diagram-generator/diagramgen.py examples/connected-vehicle-data-platform.json --out architecture/connected-vehicle-data-platform.drawio
+```
+
+Run the generator's tests:
+
+```bash
+python3 -m unittest discover -s tools/diagram-generator -p 'test_*.py' -v
+```
+
 ## Icon catalogue
 
-Run `python3 tools/icon-catalogue/iconctl.py --help` for the icon management CLI. A starter list of common technology brand marks is in `icon-library/collections/architecture-starter.json`. Official product icons should be imported from vendor packs after reviewing their terms.
+Run `python3 tools/icon-catalogue/iconctl.py --help` for icon management. A starter list of common technology brand marks is in `icon-library/collections/architecture-starter.json`. Official AWS and Azure icon packs and selected Simple Icons are stored locally. Review vendor terms before redistributing assets.
 
 ## Design principles
 
@@ -37,13 +52,9 @@ Run `python3 tools/icon-catalogue/iconctl.py --help` for the icon management CLI
 6. Keep the architecture model vendor-neutral and renderers replaceable.
 7. Keep skills focused and tools reusable across agents.
 
-## Getting started
-
-Read the relevant skill's `SKILL.md`. Use the architecture schema to describe components and connections independently of a diagram format. Store generated architecture artefacts in a project-specific directory such as `architecture/`.
-
 ## Icon policy
 
-The icon catalogue is intentionally curated. Add only assets actually used by diagrams. Prefer official AWS, Azure, Google Cloud, Kubernetes, and other vendor packs; use Simple Icons or Iconify when suitable. Check redistribution terms before committing third-party assets. See [icon-library/README.md](icon-library/README.md).
+The icon catalogue is curated. Add only assets used by diagrams. Check redistribution terms and retain source/attribution metadata. Third-party icons and trademarks retain their own licenses and terms; see the icon manifest and source terms.
 
 ## Contributing
 
