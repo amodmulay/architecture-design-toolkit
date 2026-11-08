@@ -1,6 +1,6 @@
 ---
 name: technology-selection
-description: Select and compare technologies, platforms, frameworks, cloud services, and products against explicit architecture requirements.
+description: Select and compare technologies, platforms, frameworks, cloud services, and products against explicit architecture requirements. Use when asked to evaluate, shortlist, or recommend a technology.
 ---
 
 # Technology Selection
