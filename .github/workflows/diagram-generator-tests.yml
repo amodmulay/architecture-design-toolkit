@@ -4,6 +4,11 @@ on:
   push:
     paths:
       - "tools/diagram-generator/**"
+      - "tools/install-skills/**"
+      - "skills/**"
+      - ".claude/skills/**"
+      - ".github/skills/**"
+      - ".agents/skills/**"
       - "schemas/architecture.schema.json"
       - "examples/**"
       - "docs/**"
@@ -26,6 +31,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Check skill installer syntax and options
+        run: |
+          python -m py_compile tools/install-skills/install_skills.py
+          python tools/install-skills/install_skills.py --help
       - name: Validate sample model
         run: python tools/diagram-generator/diagramgen.py examples/connected-vehicle-data-platform.json --validate-only
       - name: Generate editable Draw.io file
