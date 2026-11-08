@@ -1,0 +1,27 @@
+{
+  "model_version": "1.0",
+  "name": "Connected Vehicle Data Platform",
+  "description": "Illustrative ingestion and processing path for connected vehicle telemetry.",
+  "scope": "Vehicle-to-cloud telemetry ingestion and downstream data processing",
+  "assumptions": [
+    "Vehicle connectivity is provided by an external mobile network.",
+    "The example shows logical components, not a production deployment topology."
+  ],
+  "boundaries": [
+    {"id": "vehicle", "title": "Vehicle", "type": "edge", "description": "Vehicle systems and connectivity"},
+    {"id": "cloud", "title": "Cloud Data Platform", "type": "cloud", "provider": "Microsoft Azure"}
+  ],
+  "components": [
+    {"id": "vehicle_gateway", "title": "Vehicle Gateway", "responsibility": "Collect and forward vehicle telemetry", "category": "device", "boundary": "vehicle", "layer": "edge"},
+    {"id": "ingestion_api", "title": "Ingestion API", "responsibility": "Authenticate devices and accept telemetry", "provider": "Microsoft Azure", "technology": "Azure API Management", "icon_id": "azure/00000-icon-service-api-management.svg", "category": "gateway", "boundary": "cloud", "layer": "api"},
+    {"id": "event_stream", "title": "Event Streaming", "responsibility": "Buffer and distribute telemetry events", "provider": "Microsoft Azure", "technology": "Azure Event Hubs", "category": "messaging", "boundary": "cloud", "layer": "integration"},
+    {"id": "stream_processor", "title": "Stream Processing", "responsibility": "Validate, enrich and route telemetry", "provider": "Microsoft Azure", "technology": "Azure Databricks", "category": "processing", "boundary": "cloud", "layer": "data"},
+    {"id": "lake", "title": "Data Lake", "responsibility": "Persist raw and curated telemetry", "provider": "Microsoft Azure", "technology": "Azure Data Lake Storage", "category": "storage", "boundary": "cloud", "layer": "data"}
+  ],
+  "connections": [
+    {"id": "vehicle_to_api", "source": "vehicle_gateway", "target": "ingestion_api", "label": "Telemetry", "protocol": "HTTPS / MQTT", "mode": "sync"},
+    {"id": "api_to_stream", "source": "ingestion_api", "target": "event_stream", "label": "Publish events", "protocol": "AMQP", "mode": "async"},
+    {"id": "stream_to_processor", "source": "event_stream", "target": "stream_processor", "label": "Telemetry events", "mode": "stream"},
+    {"id": "processor_to_lake", "source": "stream_processor", "target": "lake", "label": "Curated data", "mode": "batch"}
+  ]
+}
