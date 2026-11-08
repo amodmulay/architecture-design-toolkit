@@ -13,7 +13,7 @@
   ],
   "components": [
     {"id": "vehicle_gateway", "title": "Vehicle Gateway", "responsibility": "Collect and forward vehicle telemetry", "category": "device", "boundary": "vehicle", "layer": "edge"},
-    {"id": "ingestion_api", "title": "Ingestion API", "responsibility": "Authenticate devices and accept telemetry", "provider": "Microsoft Azure", "technology": "Azure API Management", "icon_id": "azure/00000-icon-service-api-management.svg", "category": "gateway", "boundary": "cloud", "layer": "api"},
+    {"id": "ingestion_api", "title": "Ingestion API", "responsibility": "Authenticate devices and accept telemetry", "provider": "Microsoft Azure", "technology": "Azure API Management", "icon_id": "azure/10042-icon-service-api-management-services.svg", "category": "gateway", "boundary": "cloud", "layer": "api"},
     {"id": "event_stream", "title": "Event Streaming", "responsibility": "Buffer and distribute telemetry events", "provider": "Microsoft Azure", "technology": "Azure Event Hubs", "category": "messaging", "boundary": "cloud", "layer": "integration"},
     {"id": "stream_processor", "title": "Stream Processing", "responsibility": "Validate, enrich and route telemetry", "provider": "Microsoft Azure", "technology": "Azure Databricks", "category": "processing", "boundary": "cloud", "layer": "data"},
     {"id": "lake", "title": "Data Lake", "responsibility": "Persist raw and curated telemetry", "provider": "Microsoft Azure", "technology": "Azure Data Lake Storage", "category": "storage", "boundary": "cloud", "layer": "data"}
