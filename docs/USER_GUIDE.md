@@ -33,6 +33,9 @@ The model is technology-neutral. It can describe cloud, enterprise, data, AI, em
 
 ## 3. Set up
 
+If you want your coding assistant to create diagrams from natural-language requests, first install the Agent Skills. See [Installing and invoking skills](INSTALLING_SKILLS.md). For example, Claude Code users can invoke `/architecture-diagram`; Codex and Copilot use their own skill invocation/discovery conventions.
+
+
 ### Option A — Download the repository
 
 1. Open the repository on GitHub.
