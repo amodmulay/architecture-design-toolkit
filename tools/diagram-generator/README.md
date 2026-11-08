@@ -26,7 +26,7 @@ Components have stable IDs, titles, responsibilities, optional technology/provid
 
 icon_id may be a repository-relative path under icon-library/, or a unique SVG filename/stem within the icon catalogue. Icons are embedded in the Draw.io XML as base64 SVG; diagrams do not hotlink to the repository. If an icon cannot be resolved unambiguously, the component is generated without it.
 
-## Current layout behavior and limitations
+## Layout behavior and limitations
 
 - Deterministic horizontal placement within each boundary lane.
 - Components use explicit geometry and stable cell IDs.
